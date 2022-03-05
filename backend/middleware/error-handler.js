@@ -1,21 +1,40 @@
-import { StatusCodes} from 'http-status-codes'
+import { StatusCodes } from "http-status-codes";
 
-const errorHandlerMiddleware = (err, req,res,next)=>{
+const errorHandlerMiddleware = (err, req, res, next) => {
 
-            console.log(err);
+    console.log(err);
 
-            if(err.name === 'ValidationError'){
+    const defaultError = {
 
-                    const message = Object.values(err.errors).map(value=>value.message).join(',')
-               
+        StatusCode: err.StatusCode ||  StatusCodes.INTERNAL_SERVER_ERROR,
+        msg:  err.message || 'Something went wrong try again later' 
+
+    }
+
+
+    // Empty Field Error
+
+  if (err.name === "ValidationError") {
+
+    defaultError.StatusCode = StatusCodes.BAD_REQUEST
+
+    defaultError.msg = Object.values(err.errors)
+      .map((value) => value.message)
+      .join(",");
+  }
+
+
+  //Duplicate field Error
+
+  if (err.code && err.code === 11000) {
      
-                    res.status(StatusCodes.BAD_REQUEST).json({msg:message});
+    defaultError.StatusCode = StatusCodes.BAD_REQUEST
+     defaultError.msg = `${Object.keys(err.keyValue)} field has to be unique`;
 
-            }
+    
+  }
 
-            // res.status( StatusCodes.INTERNAL_SERVER_ERROR ).json({msg: err });
-
-
-}
+    res.status(defaultError.StatusCode).json({ msg: defaultError.msg });
+};
 
 export default errorHandlerMiddleware;
