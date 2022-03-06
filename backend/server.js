@@ -1,5 +1,6 @@
 import express from 'express';
 const app = express();
+import cors from 'cors';
 
 import dotenv from 'dotenv';
 import 'express-async-errors';
@@ -23,7 +24,10 @@ dotenv.config({path:'config/config.env'})
 const port = process.env.PORT || 5000;
 
 
+
+app.use(cors());
 app.use(express.json());
+
 
 app.use( '/api/v1/auth' ,authRouter);
 app.use( '/api/v1/jobs' , jobsRouter);
