@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
 
+    // field and types to create, find document each time controller function is called...
             userName:{
                 type:String,
                 required:[true, 'Please Provide name'],
@@ -49,6 +50,7 @@ const userSchema = new mongoose.Schema({
 
 
 
+// password must be hashed before saving in the database...
 userSchema.pre('save', async function(){
 
                const salt =  await bcrypt.genSalt(10);
@@ -56,7 +58,7 @@ userSchema.pre('save', async function(){
 
 });
 
-
+// random token generated using Jsonwebtoken using user id, Secret code and expiry data..
 userSchema.methods.createJWT = function(){
 
             return jwt.sign({userId:this._id}, process.env.JWT_SECRET, {expiresIn: process.env.EXPIRY_DATE});
@@ -65,8 +67,17 @@ userSchema.methods.createJWT = function(){
 
 }
 
+// password compared with user sending from client with hashed password in database..
+userSchema.methods.comparePassword = async function(userPassword){
+
+        const isMatch = await bcrypt.compare(userPassword, this.password);
+        return isMatch;
 
 
+}
+
+
+// model is created using Schema.. (can be same as Table replica..)
 
 export const User = mongoose.model('User', userSchema);
 

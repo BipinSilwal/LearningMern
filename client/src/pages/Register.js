@@ -24,7 +24,7 @@ const Register = () => {
         const [values, setValues ] = useState(initialState);
       
 
-        const {isLoading, showAlert, displayAlert, clearAlert, registerUser, user } = useAppContext();
+        const {isLoading, showAlert, displayAlert, clearAlert, user, setUpUser } = useAppContext();
 
         const navigate = useNavigate();
         
@@ -48,12 +48,13 @@ const Register = () => {
 
                 if(isMember){
 
-                        console.log('Already a member');
+                       
+                        setUpUser({currentUser, endPoints:'login', alertText:"Login Successful!!"});
 
 
                 }
                 else{
-                        registerUser(currentUser);
+                        setUpUser({currentUser, endPoints:'register', alertText:'User created Successfully!!'});
                 }
         
                 
@@ -75,11 +76,14 @@ const Register = () => {
 
         useEffect(()=>{
 
-                if(user){
-        
-                        navigate('/');
-        
-                }
+                setTimeout(()=>{
+
+                        if(user){
+                
+                                navigate('/');
+                
+                        }
+                }, 3000)
 
         }, [user, navigate])
         
@@ -115,3 +119,8 @@ const Register = () => {
 }
 
 export default Register
+
+
+
+
+

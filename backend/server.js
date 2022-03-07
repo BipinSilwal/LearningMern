@@ -1,5 +1,6 @@
 import express from 'express';
 const app = express();
+import morgan from 'morgan';
 import cors from 'cors';
 
 import dotenv from 'dotenv';
@@ -23,6 +24,11 @@ dotenv.config({path:'config/config.env'})
 //port
 const port = process.env.PORT || 5000;
 
+if(process.env.NODE_ENV !=='production'){
+
+                app.use(morgan('dev'));
+
+};
 
 
 app.use(cors());
