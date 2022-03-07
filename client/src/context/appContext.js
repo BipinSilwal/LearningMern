@@ -96,6 +96,7 @@ const AppProvider = ({children})=>{
 
 
                                 }
+                                
                                 clearAlert()
 
         }

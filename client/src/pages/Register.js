@@ -34,7 +34,7 @@ const Register = () => {
 
                         e.preventDefault();
 
-                        const {userName,email, password, isMember} = values;
+                const {userName,email, password, isMember} = values;
 
                 if(!email || !password || (!isMember && !userName)){
 
