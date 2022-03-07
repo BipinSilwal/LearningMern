@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../assets/images/logo.svg";
 import main from "../assets/images/main.svg";
 import Wrapper from '../assets/wrappers/LandingPage';
+import { Link } from "react-router-dom";
 
 
 const Landing = () => {
@@ -23,7 +24,7 @@ const Landing = () => {
             blog fashion axe, messenger bag swag selvage yuccie pour-over
             raclette.
           </p>
-          <button className="btn btn-hero">Login/Register</button>
+          <Link to ="/register"><button className="btn btn-hero">Login/Register</button></Link>
         </div>
             <img src={main} className="img main-img" alt="job hunt"/>
 
