@@ -1,4 +1,4 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS } from "./action";
+import { CLEAR_ALERT, DISPLAY_ALERT, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS } from "./action";
 
 
 
@@ -23,12 +23,14 @@ const reducer = (state,  action)=>{
 
                 }
             
-            case REGISTER_USER_BEGIN:{
+            case SETUP_USER_BEGIN:
+            
                 return {
                         ...state, isLoading:true
                 }
-            }
-            case REGISTER_USER_SUCCESS:{
+            
+            case SETUP_USER_SUCCESS:
+            
                 return {
                         ...state,
                         isLoading:false,
@@ -37,10 +39,11 @@ const reducer = (state,  action)=>{
                         userLocation:action.payload.location,
                         showAlert:true,
                         alertType:"success",
-                        alertText:" User created! Redirecting",
+                        alertText:action.payload.alertText,
                 }
-            }
-            case REGISTER_USER_ERROR:{
+            
+            case SETUP_USER_ERROR:
+           
                 return {
                         ...state,
                         isLoading:false,
@@ -50,7 +53,7 @@ const reducer = (state,  action)=>{
                         
 
                 }
-            }
+            
         
 
     
