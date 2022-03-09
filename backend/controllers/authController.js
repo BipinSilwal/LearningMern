@@ -48,7 +48,7 @@ export const register = async(req,res)=>{
                                 status:'success',
                                 
                                 user:{
-                                        name:user.name,
+                                        userName:user.userName,
                                         email:user.email,
                                         lastName:user.lastName,
                                         location:user.location,

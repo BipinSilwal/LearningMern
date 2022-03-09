@@ -8,3 +8,10 @@ export const SETUP_USER_ERROR = 'REGISTER_USER_ERROR'
 
 
 
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
+
+
+
+export const LOGOUT_USER = 'LOGOUT_USER'
+
+

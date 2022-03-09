@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react"
-import { CLEAR_ALERT, DISPLAY_ALERT, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS } from "./action";
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR } from "./action";
 import reducer from "./reducers";
 import axios from 'axios';
 
@@ -17,7 +17,8 @@ const initialState = {
             user:user ? JSON.parse(user): null,
             token:token,
             userLocation:userLocation || '',
-            jobLocation:userLocation || ''
+            jobLocation:userLocation || '',
+            showSideBar:false
 
 
 }
@@ -56,14 +57,14 @@ const AppProvider = ({children})=>{
 
         }
 
-        // const removeUserFromLocalStorage = ({user, token, location})=>{
+        const removeUserFromLocalStorage = ()=>{
 
-        //                 localStorage.removeItem('user');
-        //                 localStorage.removeItem('token');
-        //                 localStorage.removeItem('location');
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('location');
 
 
-        // }
+        }
 
 
         const setUpUser = async({currentUser, endPoints, alertText})=>{
@@ -102,9 +103,23 @@ const AppProvider = ({children})=>{
         }
 
 
+        const sideBar = ()=>{
+
+                        return (
+                                dispatch({type:TOGGLE_SIDEBAR})
+                                )
+                        
+                        }
        
 
-        return <AppContext.Provider value={{...state, displayAlert, clearAlert, setUpUser}}>
+        const logout = ()=>{
+
+                        dispatch({type: LOGOUT_USER })
+                        removeUserFromLocalStorage();
+
+        }
+
+        return <AppContext.Provider value={{...state, displayAlert, clearAlert, setUpUser, sideBar, logout}}>
 
                 {children}
 
