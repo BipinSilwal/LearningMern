@@ -1,23 +1,26 @@
-import React  from 'react'
-import { Link, Outlet } from 'react-router-dom'
-
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Wrapper from "../../assets/wrappers/SharedLayout";
+import { Navbar, BigSideBar, SmallSideBar } from "../../components/index";
 
 const Dashboard = () => {
-
-
-
   return (
-    <div>
-      
-            <h1>this is dashboard</h1>
-              <Link to="add-job">add job</Link> 
-              <Link to="all-job">all job</Link> 
-              <Link to="profile">all job</Link> 
-              <Link to="stats">all job</Link> 
-            <Outlet/> 
-      
-      </div>
-  )
-}
+    <>
+      <Wrapper>
+        <main className="dashboard">
+          <SmallSideBar />
+          <BigSideBar />
+          <div>
+            <Navbar />
 
-export default Dashboard
+            <div className="dashboard-page">
+              <Outlet />
+            </div>
+          </div>
+        </main>
+      </Wrapper>
+    </>
+  );
+};
+
+export default Dashboard;
