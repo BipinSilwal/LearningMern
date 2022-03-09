@@ -1,4 +1,5 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS } from "./action";
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR } from "./action";
+import { initialState } from "./appContext";
 
 
 
@@ -53,6 +54,22 @@ const reducer = (state,  action)=>{
                         
 
                 }
+        
+         case TOGGLE_SIDEBAR:
+             return {...state, 
+                    showSideBar:!state.showSideBar
+                }
+
+
+         case LOGOUT_USER:
+             return { ...initialState,
+                        user:null,
+                        token:null,
+                        userLocation:null,
+                        jobLocation:null
+                    
+                }
+            
             
         
 
