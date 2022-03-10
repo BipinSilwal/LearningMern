@@ -3,8 +3,8 @@ import React from 'react'
 const AddJob = () => {
   return (<>
   
-  <div>Add-job</div>
-  <h1>your job</h1>
+
+  <h1>Add job</h1>
   
   </>
   )
