@@ -53,9 +53,14 @@ const userSchema = new mongoose.Schema({
 // password must be hashed before saving in the database...
 userSchema.pre('save', async function(){
 
-               const salt =  await bcrypt.genSalt(10);
-               this.password = await bcrypt.hash(this.password, salt);
+        // if we are not changing the password and only modify other filed then we use isModified method
 
+                if(!this.isModified('password'))return  // since password is not modified we are not returning hash password again from scratch
+
+                const salt =  await bcrypt.genSalt(10);
+               this.password = await bcrypt.hash(this.password, salt);
+               
+                
 });
 
 // random token generated using Jsonwebtoken using user id, Secret code and expiry data..

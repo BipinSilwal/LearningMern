@@ -129,9 +129,43 @@ export const login = async(req,res,next)=>{
 
 
 
-export const updateUser = (req,res,next)=>{
+export const updateUser = async(req,res )=>{
 
-    res.send('update User');
+  // users send data for registration........ 
+  const {userName, email, lastName, location} = req.body;
+
+                
+
+  // if user click submit button without filling the form...
+  if(!userName || !email || !lastName ||!location  ){
+
+          throw new BadRequestError('Please provide all the values');
+
+  }
+
+
+  const user = await User.findOne({_id: req.user.userId});
+
+  console.log(user);
+
+  user.userName = userName;
+  user.email = email;
+  user.lastName = lastName;
+  user.location = location;
+
+
+  await user.save();
+
+
+const token = user.createJWT();
+
+
+    res.status(StatusCodes.OK).json({
+            message:"user updated Successfully!!",
+            user,
+            token,
+            location:user.location
+    })
 
 }
 

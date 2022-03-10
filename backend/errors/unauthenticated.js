@@ -10,7 +10,7 @@ export class UnauthenticatedError extends CustomApiError{
                 this.statusCode = StatusCodes.UNAUTHORIZED
 
         }
-
+s
 
 }
 
