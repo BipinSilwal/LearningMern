@@ -5,8 +5,9 @@ import Alert from "../../components/Alert";
 import Wrapper from '../../assets/wrappers/DashboardFormPage';
 
 
+
 const Profile = () => {
-  const { user, isLoading, displayAlert, showAlert, updateUser } = useAppContext();
+  const { user, isLoading, displayAlert, showAlert, updateUser, clearAlert} = useAppContext();
 
   const [userName, setName] = useState(user?.userName);
   const [email, setEmail] = useState(user?.email);
@@ -17,7 +18,9 @@ const Profile = () => {
     e.preventDefault();
 
     if (!userName || !email || !lastName || !location) {
+      
       displayAlert();
+      clearAlert();
       return;
     }
 
@@ -29,7 +32,7 @@ const Profile = () => {
       <Wrapper className="full-page">
         <form className="form" onSubmit={handleSubmit}>
           <h3>profile</h3>
-          
+
           {showAlert && <Alert/>}
 
           <div className="form-center">

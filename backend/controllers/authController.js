@@ -1,6 +1,6 @@
 import { User } from '../models/User.js';
 import { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } from 'http-status-codes';
-import { BadRequestError, UnauthenticatedError } from '../errors/index.js';
+import { BadRequestError  } from '../errors/index.js';
 
 
 
@@ -146,7 +146,7 @@ export const updateUser = async(req,res )=>{
 // while updating user, user must be logged in so that they have token.. Once we verify the token we get userId of the user..
   const user = await User.findOne({_id: req.user.userId});
 
-  console.log(user);
+ 
 
  // now whatever the name, email, lastName, location user send will be added to the user document.
 
@@ -159,7 +159,7 @@ export const updateUser = async(req,res )=>{
   // for user document to get updated we need to save it..
   await user.save();
 
-
+console.log(user);
   // after saving the new document we again send the new token back to the client...
 const token = user.createJWT();
 
