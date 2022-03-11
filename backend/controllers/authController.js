@@ -126,7 +126,7 @@ export const login = async(req,res,next)=>{
 
 
 }
-
+            
 
 
 export const updateUser = async(req,res )=>{
@@ -143,10 +143,12 @@ export const updateUser = async(req,res )=>{
 
   }
 
-
+// while updating user, user must be logged in so that they have token.. Once we verify the token we get userId of the user..
   const user = await User.findOne({_id: req.user.userId});
 
   console.log(user);
+
+ // now whatever the name, email, lastName, location user send will be added to the user document.
 
   user.userName = userName;
   user.email = email;
@@ -154,9 +156,11 @@ export const updateUser = async(req,res )=>{
   user.location = location;
 
 
+  // for user document to get updated we need to save it..
   await user.save();
 
 
+  // after saving the new document we again send the new token back to the client...
 const token = user.createJWT();
 
 

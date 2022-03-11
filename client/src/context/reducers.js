@@ -1,4 +1,4 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR } from "./action";
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import { initialState } from "./appContext";
 
 
@@ -25,12 +25,14 @@ const reducer = (state,  action)=>{
                 }
             
             case SETUP_USER_BEGIN:
+            case UPDATE_USER_BEGIN:
             
                 return {
                         ...state, isLoading:true
                 }
             
             case SETUP_USER_SUCCESS:
+            case UPDATE_USER_SUCCESS:
             
                 return {
                         ...state,
@@ -44,6 +46,7 @@ const reducer = (state,  action)=>{
                 }
             
             case SETUP_USER_ERROR:
+            case UPDATE_USER_ERROR:
            
                 return {
                         ...state,
@@ -54,6 +57,12 @@ const reducer = (state,  action)=>{
                         
 
                 }
+            
+            
+             
+
+            
+                
         
          case TOGGLE_SIDEBAR:
              return {...state, 
