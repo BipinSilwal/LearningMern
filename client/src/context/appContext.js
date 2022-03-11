@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react"
-import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR } from "./action";
+import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import reducer from "./reducers";
 import axios from 'axios';
 
@@ -102,6 +102,54 @@ const AppProvider = ({children})=>{
 
         }
 
+        const updateUser = async(currentUser)=>{
+
+                dispatch({type: UPDATE_USER_BEGIN });
+                try{
+
+
+                                               const response = await axios.patch('/api/v1/auth/updateUser', currentUser, {
+
+                                                        headers:{
+                                                                Authorization: `Bearer ${state.token}`
+                                                        }
+
+                                               });
+
+                                               const {user, token, location} = response.data;
+                                                dispatch({
+                                                        type: UPDATE_USER_SUCCESS,
+                                                        payload: {
+                                                                user,
+                                                                token, 
+                                                                location,
+                                                                alertText: currentUser.alertText
+                                                        }
+                                                
+                                                
+                                                });
+
+                                                addUserToLocalStorage({user, token, location});
+
+
+
+                                } catch(error){
+
+
+                                                dispatch({ 
+                                                        
+                                                        type: UPDATE_USER_ERROR,
+                                                        msg: error.response.data.msg
+                                                
+                                                })
+
+                                }                     
+
+
+                                clearAlert()
+
+        }
+
 
         const sideBar = ()=>{
 
@@ -119,7 +167,7 @@ const AppProvider = ({children})=>{
 
         }
 
-        return <AppContext.Provider value={{...state, displayAlert, clearAlert, setUpUser, sideBar, logout}}>
+        return <AppContext.Provider value={{...state, displayAlert, clearAlert, setUpUser, sideBar, logout, updateUser}}>
 
                 {children}
 
