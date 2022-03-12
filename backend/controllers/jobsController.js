@@ -23,12 +23,12 @@ export const createJob = async(req,res)=>{
         // calling auth middleware to get verified token which contain user Id..
         req.body.createdBy = req.user.userId;
 
-        console.log(req.body.createBy);
+       
 
         // we create new job all time when there is user logged in..
         const job = await JOB.create(req.body);
 
-        console.log(job);
+        
 
 
         // sending response to the user...

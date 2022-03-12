@@ -1,4 +1,4 @@
-import { CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
+import { ADD_JOB, CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import { initialState } from "./appContext";
 
 
@@ -80,7 +80,12 @@ const reducer = (state,  action)=>{
                 }
             
             
-        
+        case ADD_JOB:
+            return {
+
+                    ...state, [action.payload.name]:action.payload.value
+
+            }
 
     
     default:

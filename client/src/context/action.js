@@ -20,3 +20,9 @@ export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
 export const LOGOUT_USER = 'LOGOUT_USER'
 
 
+//JOB
+
+
+export const ADD_JOB = 'ADD_JOB'
+
+
