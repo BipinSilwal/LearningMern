@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 import { UnauthenticatedError } from "../errors/index.js";
 
- const authentication = (req,res,next)=>{
+ const authentications = (req,res,next)=>{
 
      // user send the token for requesting other pages..
         const authHeader = req.headers.authorization
@@ -43,7 +43,7 @@ import { UnauthenticatedError } from "../errors/index.js";
 
 }
 
-export default authentication;
+export default authentications;
 
 
 

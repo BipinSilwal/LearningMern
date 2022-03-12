@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError } from "../errors/bad-request";
-import JOB from "../models/Job";
+import { BadRequestError } from "../errors/bad-request.js";
+import JOB from "../models/Job.js";
+
 
 export const createJob = async(req,res)=>{
 
@@ -19,11 +20,15 @@ export const createJob = async(req,res)=>{
         }
 
         // we get createBy field from user which need to have user Id to create new one.
-        req.body.createBy = req.user.userId;
+        // calling auth middleware to get verified token which contain user Id..
+        req.body.createdBy = req.user.userId;
 
+        console.log(req.body.createBy);
 
         // we create new job all time when there is user logged in..
         const job = await JOB.create(req.body);
+
+        console.log(job);
 
 
         // sending response to the user...

@@ -1,6 +1,6 @@
 import { User } from '../models/User.js';
 import { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } from 'http-status-codes';
-import { BadRequestError  } from '../errors/index.js';
+import { BadRequestError, UnauthenticatedError  } from '../errors/index.js';
 
 
 
