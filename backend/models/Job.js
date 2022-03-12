@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { User } from './User';
 
 
-const jobSchema = new mongoose.Schema(
+
+const JobSchema = new mongoose.Schema(
     
     {
 
@@ -40,21 +40,20 @@ const jobSchema = new mongoose.Schema(
 
     createdBy:{
 
-            type:mongoose.Types.ObjectId,
+            type: mongoose.Types.ObjectId,
             ref:'User',
             required:[true, 'Please provide user']
 
-    }
+    },
 
 
 },
 
-{timestamps:true}
-
+{ timestamps:true }
 
 );
 
 
-const JOB = mongoose.model('JOB', jobSchema);
+const JOB = mongoose.model('Job', JobSchema);
 
 export default JOB;

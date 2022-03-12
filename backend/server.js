@@ -16,7 +16,7 @@ import connectDB from './config/db/connect.js';
 //routes
 import authRouter from './router/authRouter.js';
 import jobsRouter from './router/jobsRoutes.js';
-import  authentication  from './middleware/auth.js';
+import  authentications  from './middleware/auth.js';
 
 //env file
 dotenv.config({path:'config/config.env'})
@@ -37,7 +37,7 @@ app.use(express.json());
 
 
 app.use( '/api/v1/auth' ,authRouter);
-app.use( '/api/v1/jobs' , authentication, jobsRouter);
+app.use( '/api/v1/jobs' , authentications, jobsRouter);
 
 
 

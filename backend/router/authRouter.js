@@ -1,7 +1,7 @@
 
 import express from 'express';
 import { login, register, updateUser } from '../controllers/authController.js';
-import  authentication  from '../middleware/auth.js';
+import  authentications  from '../middleware/auth.js';
 
 
 const authRouter = express.Router();
@@ -10,7 +10,7 @@ const authRouter = express.Router();
 
 authRouter.route('/register').post(register);
 authRouter.route('/login').post( login );
-authRouter.route('/updateUser').patch( authentication,   updateUser );
+authRouter.route('/updateUser').patch( authentications,   updateUser );
 
 
 export default authRouter;
