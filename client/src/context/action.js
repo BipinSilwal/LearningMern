@@ -24,5 +24,6 @@ export const LOGOUT_USER = 'LOGOUT_USER'
 
 
 export const ADD_JOB = 'ADD_JOB'
+export const CLEAR_JOB = 'CLEAR_JOB'
 
 

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react"
-import { ADD_JOB, CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
+import { ADD_JOB, CLEAR_ALERT, CLEAR_JOB, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import reducer from "./reducers";
 import axios from 'axios';
 
@@ -247,11 +247,18 @@ const AppProvider = ({children})=>{
 
         }
 
+        const clearJob = ()=>{
+
+                        dispatch({type:CLEAR_JOB})
+
+
+        }
+
 
         
 
 // here we are sending global state, action to the component..
-        return <AppContext.Provider value={{...state, addingJob, displayAlert, clearAlert, setUpUser, sideBar, logout, updateUser}}>
+        return <AppContext.Provider value={{...state, addingJob, displayAlert, clearAlert, setUpUser, sideBar, logout, updateUser, clearJob}}>
 
                 {children}
 
