@@ -7,6 +7,8 @@ import {
   CREATE_JOB_ERROR,
   CREATE_JOB_SUCCESS,
   DISPLAY_ALERT,
+  GET_JOBS_BEGIN,
+  GET_JOBS_SUCCESS,
   LOGOUT_USER,
   SETUP_USER_BEGIN,
   SETUP_USER_ERROR,
@@ -15,6 +17,7 @@ import {
   UPDATE_USER_BEGIN,
   UPDATE_USER_ERROR,
   UPDATE_USER_SUCCESS,
+ 
 } from "./action";
 import reducer from "./reducers";
 import axios from "axios";
@@ -27,6 +30,9 @@ const userLocation = localStorage.getItem("location");
 
 // initial value of the global State....
 const initialState = {
+  jobs:[],
+  totalJobs:0,
+  page:1,
   isLoading: false,
   showAlert: false,
   alertText: "",
@@ -230,6 +236,28 @@ const AppProvider = ({ children }) => {
   };
 
 
+  const allJobs = async ()=>{
+
+      dispatch({type: GET_JOBS_BEGIN });
+
+      const { data } = await authFetch.get('/jobs');
+      console.log(data);
+      const { jobs, totalJobs, numOfPages } = data;
+
+      dispatch({
+        type: GET_JOBS_SUCCESS,
+        payload:{
+          jobs,
+          totalJobs,
+          numOfPages
+        }
+      
+      
+      })
+
+
+  }
+
 
   // here we are sending global state, action to the component..
   return (
@@ -245,6 +273,7 @@ const AppProvider = ({ children }) => {
         updateUser,
         clearJob,
         createJob,
+        allJobs
       }}
     >
       {children}

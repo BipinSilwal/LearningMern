@@ -32,3 +32,12 @@ export const CREATE_JOB_SUCCESS = 'CREATE_JOB_SUCCESS'
 export const CREATE_JOB_ERROR = 'CREATE_JOB_ERROR'
 
 
+
+export const GET_JOBS_BEGIN = 'GET_JOBS_BEGIN'
+export const GET_JOBS_SUCCESS = 'GET_JOBS_SUCCESS'
+
+
+
+
+
+
