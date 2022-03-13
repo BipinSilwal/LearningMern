@@ -1,12 +1,14 @@
 import React from "react";
 import FormRow from "../../components/FormRow";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
-import Alert from "../../components/Alert";
+import Alert from '../../components/Alert'
 import { useAppContext } from "../../context/appContext";
 import Selection from "../../components/Select";
 
+
 const AddJob = () => {
   const {
+    isLoading,
     showAlert,
     isEditing,
     position,
@@ -18,18 +20,30 @@ const AddJob = () => {
     status,
     statusOptions,
     addingJob,
-    clearJob
+    clearJob,
+    createJob,
+    clearAlert
   } = useAppContext();
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!position || !company || !jobLocation) {
       displayAlert();
-      return;
+      clearAlert(); 
+      return
     }
 
-   console.log('create-job');
+
+    if(isEditing){
+
+        return 
+        
+      }
+      
+      createJob();
+    
 
   };
 
@@ -43,13 +57,15 @@ const AddJob = () => {
 
   };
 
+  
+
   return (
     <>
       <Wrapper>
         <form className="form">
           <h3>{isEditing ? "edit Job" : "add job"}</h3>
 
-          {showAlert && <Alert />}
+          {showAlert && <Alert/>}
 
           <div className="form-center">
             <FormRow
@@ -92,7 +108,9 @@ const AddJob = () => {
                 className="btn btn-block submit-btn"
                 type="submit"
                 onClick={handleSubmit}
+                disabled={isLoading}
               >
+                
                 submit
               </button>
 
