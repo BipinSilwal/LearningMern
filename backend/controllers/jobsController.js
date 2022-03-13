@@ -40,9 +40,19 @@ export const createJob = async(req,res)=>{
 
 }
 
-export const getAllJobs = (req,res,next)=>{
+export const getAllJobs = async(req,res,next)=>{
 
-    res.send(' All jobs');
+    
+        const jobs = await JOB.find({createdBy: req.user.userId});
+
+        
+        res.status(StatusCodes.OK).json({
+            status:'success',
+            jobs,
+            totalJobs: jobs.length, 
+            numOfPages: 1
+        })
+
 
 
 }

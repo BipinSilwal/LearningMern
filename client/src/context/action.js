@@ -24,5 +24,20 @@ export const LOGOUT_USER = 'LOGOUT_USER'
 
 
 export const ADD_JOB = 'ADD_JOB'
+export const CLEAR_JOB = 'CLEAR_JOB'
+
+
+export const CREATE_JOB_BEGIN = 'CREATE_JOB_BEGIN'
+export const CREATE_JOB_SUCCESS = 'CREATE_JOB_SUCCESS'
+export const CREATE_JOB_ERROR = 'CREATE_JOB_ERROR'
+
+
+
+export const GET_JOBS_BEGIN = 'GET_JOBS_BEGIN'
+export const GET_JOBS_SUCCESS = 'GET_JOBS_SUCCESS'
+
+
+
+
 
 

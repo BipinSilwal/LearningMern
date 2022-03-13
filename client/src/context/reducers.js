@@ -1,4 +1,4 @@
-import { ADD_JOB, CLEAR_ALERT, DISPLAY_ALERT, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
+import { ADD_JOB, CLEAR_ALERT, CLEAR_JOB, CREATE_JOB_BEGIN, CREATE_JOB_ERROR, CREATE_JOB_SUCCESS, DISPLAY_ALERT, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import { initialState } from "./appContext";
 
 
@@ -26,13 +26,38 @@ const reducer = (state,  action)=>{
             
             case SETUP_USER_BEGIN:
             case UPDATE_USER_BEGIN:
+            case CREATE_JOB_BEGIN:
+            case GET_JOBS_BEGIN:
+           
             
                 return {
                         ...state, isLoading:true
                 }
             
+          
+                case CREATE_JOB_SUCCESS:
+                    return {
+                            ...state,
+                            isLoading:false,
+                            showAlert:true,
+                            alertType:"success",
+                            alertText:"New job Created !!"
+                    }
+
+                case GET_JOBS_SUCCESS:
+                    return {
+                            ...state,
+                            isLoading:false,
+                            jobs:[...action.payload.jobs],
+                            totalJobs: action.payload.totalJobs,
+                            page: action.payload.numOfPages
+
+                    }
+            
             case SETUP_USER_SUCCESS:
             case UPDATE_USER_SUCCESS:
+           
+        
             
                 return {
                         ...state,
@@ -44,9 +69,11 @@ const reducer = (state,  action)=>{
                         alertType:"success",
                         alertText:action.payload.alertText,
                 }
+
             
             case SETUP_USER_ERROR:
             case UPDATE_USER_ERROR:
+            case CREATE_JOB_ERROR:
            
                 return {
                         ...state,
@@ -84,6 +111,13 @@ const reducer = (state,  action)=>{
             return {
 
                     ...state, [action.payload.name]:action.payload.value
+
+            }
+
+        case CLEAR_JOB:
+            return {
+
+                    ...state, ...initialState
 
             }
 
