@@ -1,4 +1,4 @@
-import { ADD_JOB, CLEAR_ALERT, CLEAR_JOB, CREATE_JOB_BEGIN, CREATE_JOB_ERROR, CREATE_JOB_SUCCESS, DISPLAY_ALERT, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
+import { ADD_JOB, CLEAR_ALERT, CLEAR_JOB, CREATE_JOB_BEGIN, CREATE_JOB_ERROR, CREATE_JOB_SUCCESS, DISPLAY_ALERT, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, SET_EDIT_JOB, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import { initialState } from "./appContext";
 
 
@@ -118,6 +118,21 @@ const reducer = (state,  action)=>{
             return {
 
                     ...state, ...initialState
+
+            }
+
+        case SET_EDIT_JOB:
+            const job = state.jobs.find((job)=> job._id === action.payload.id)
+            const {_id, position, company, jobLocation, jobType, status} = job
+            return {
+                ...state,
+                isEditing:true,
+                editJobId:_id,
+                position,
+                company,
+                jobLocation,
+                jobType,
+                status
 
             }
 

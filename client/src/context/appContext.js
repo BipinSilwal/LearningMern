@@ -13,11 +13,11 @@ import {
   SETUP_USER_BEGIN,
   SETUP_USER_ERROR,
   SETUP_USER_SUCCESS,
+  SET_EDIT_JOB,
   TOGGLE_SIDEBAR,
   UPDATE_USER_BEGIN,
   UPDATE_USER_ERROR,
   UPDATE_USER_SUCCESS,
- 
 } from "./action";
 import reducer from "./reducers";
 import axios from "axios";
@@ -30,9 +30,9 @@ const userLocation = localStorage.getItem("location");
 
 // initial value of the global State....
 const initialState = {
-  jobs:[],
-  totalJobs:0,
-  page:1,
+  jobs: [],
+  totalJobs: 0,
+  page: 1,
   isLoading: false,
   showAlert: false,
   alertText: "",
@@ -93,10 +93,7 @@ const AppProvider = ({ children }) => {
 
   // Action called by user to display alert.. dispatch here is the type which triggered the reducer which gives new state..
   const displayAlert = () => {
-   
-      dispatch({ type: DISPLAY_ALERT });
-  
-   
+    dispatch({ type: DISPLAY_ALERT });
   };
   const clearAlert = () => {
     setTimeout(() => {
@@ -201,12 +198,9 @@ const AppProvider = ({ children }) => {
     dispatch({ type: ADD_JOB, payload: { name, value } });
   };
 
-
   const clearJob = () => {
-        dispatch({ type: CLEAR_JOB });
-      };
-
-
+    dispatch({ type: CLEAR_JOB });
+  };
 
   const createJob = async () => {
     dispatch({ type: CREATE_JOB_BEGIN });
@@ -223,41 +217,52 @@ const AppProvider = ({ children }) => {
 
       dispatch({ type: CREATE_JOB_SUCCESS });
       dispatch({ type: CLEAR_JOB });
-      
-    
     } catch (error) {
-      if (error.response.status === 401) return 
+      if (error.response.status === 401) return;
       dispatch({
         type: CREATE_JOB_ERROR,
         payload: { msg: error.response.data.msg },
       });
     }
-    clearAlert()
+    clearAlert();
   };
 
+  const allJobs = async () => {
+    dispatch({ type: GET_JOBS_BEGIN });
 
-  const allJobs = async ()=>{
+    try {
+      const { data } = await authFetch.get("/jobs");
 
-      dispatch({type: GET_JOBS_BEGIN });
-
-      const { data } = await authFetch.get('/jobs');
-      console.log(data);
       const { jobs, totalJobs, numOfPages } = data;
 
       dispatch({
         type: GET_JOBS_SUCCESS,
-        payload:{
+        payload: {
           jobs,
           totalJobs,
-          numOfPages
-        }
-      
-      
-      })
+          numOfPages,
+        },
+      });
+    } catch (error) {
+      logout();
+    }
+    clearAlert();
+  };
 
+  const setEditJob = (id) => {
+
+        dispatch({type: SET_EDIT_JOB, payload:{id}})
+
+  };
+
+  const editJob = ()=>{
+      console.log('edit job')
 
   }
 
+  const deleteJob = (id) => {
+    console.log(`delete: ${id}`);
+  };
 
   // here we are sending global state, action to the component..
   return (
@@ -273,7 +278,10 @@ const AppProvider = ({ children }) => {
         updateUser,
         clearJob,
         createJob,
-        allJobs
+        allJobs,
+        setEditJob,
+        deleteJob,
+        editJob
       }}
     >
       {children}
