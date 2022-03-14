@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import {
+
   ADD_JOB,
   CLEAR_ALERT,
   CLEAR_JOB,
@@ -240,21 +241,43 @@ const AppProvider = ({ children }) => {
 
       dispatch({type: GET_JOBS_BEGIN });
 
-      const { data } = await authFetch.get('/jobs');
-      console.log(data);
-      const { jobs, totalJobs, numOfPages } = data;
+      try{
 
-      dispatch({
-        type: GET_JOBS_SUCCESS,
-        payload:{
-          jobs,
-          totalJobs,
-          numOfPages
-        }
-      
-      
-      })
 
+        const { data } = await authFetch.get('/jobs');
+       
+        const { jobs, totalJobs, numOfPages } = data;
+  
+        dispatch({
+          type: GET_JOBS_SUCCESS,
+          payload:{
+            jobs,
+            totalJobs,
+            numOfPages
+          }
+        
+        
+        })
+      }catch(error){
+
+          logout()
+
+      }
+      clearAlert()
+
+
+
+  }
+
+  const setEditJob = (id)=>{
+
+      console.log(`set edit job: ${id}`)
+
+  }
+
+  const deleteJob = (id)=>{
+
+      console.log(`delete: ${id}`)
 
   }
 
@@ -273,7 +296,9 @@ const AppProvider = ({ children }) => {
         updateUser,
         clearJob,
         createJob,
-        allJobs
+        allJobs,
+        setEditJob,
+        deleteJob
       }}
     >
       {children}
