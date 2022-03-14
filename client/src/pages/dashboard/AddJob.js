@@ -6,6 +6,7 @@ import { useAppContext } from "../../context/appContext";
 import Selection from "../../components/Select";
 
 
+
 const AddJob = () => {
   const {
     isLoading,
@@ -22,10 +23,16 @@ const AddJob = () => {
     addingJob,
     clearJob,
     createJob,
-    clearAlert
+    clearAlert,
+    editJob,
+    setEditJob
   } = useAppContext();
 
   
+
+ 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -38,6 +45,7 @@ const AddJob = () => {
 
     if(isEditing){
 
+        editJob()
         return 
         
       }

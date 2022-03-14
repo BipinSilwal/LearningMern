@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const Job = ({
   position,
   company,
-  location,
+  jobLocation,
   status,
   jobType,
   createdAt,
@@ -17,8 +17,8 @@ const Job = ({
 }) => {
   const { setEditJob, deleteJob } = useAppContext();
 
-  let data = moment(createdAt);
-  data = data.format("MMM Do, YYYY");
+  let date= moment(createdAt);
+  date = date.format("MMM Do, YYYY");
   return (
     <>
       <Wrapper>
@@ -27,16 +27,20 @@ const Job = ({
           <div className="info">
             <h5>{position}</h5>
             <h5>{company}</h5>
-            <h5>{data}</h5>
-            {/* <h5>{location}</h5>
-            <h5>{status}</h5>
-            <h5>{jobType}</h5>
-            <h5>{data}</h5> */}
+            
           </div>
         </header>
 
         <div className="content">
           {/*  */}
+          <div className="content-center">
+            <JobInfo icon={ <FaLocationArrow/>  } text={jobLocation}/>
+            <JobInfo icon={ <FaCalendar/>  } text={date}/>
+            <JobInfo icon={ <FaBriefcase/>  } text={jobType}/>
+            <div className= {`status ${status}`}>{status}</div>
+
+
+          </div>
           <footer>
             <div className="actions">
               <Link
