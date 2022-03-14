@@ -6,7 +6,11 @@ import {
   CREATE_JOB_BEGIN,
   CREATE_JOB_ERROR,
   CREATE_JOB_SUCCESS,
+  DELETE_JOB_BEGIN,
   DISPLAY_ALERT,
+  EDIT_JOB_BEGIN,
+  EDIT_JOB_SUCCESS,
+  EDIT_JOB_ERROR,
   GET_JOBS_BEGIN,
   GET_JOBS_SUCCESS,
   LOGOUT_USER,
@@ -227,7 +231,9 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+
   const allJobs = async () => {
+
     dispatch({ type: GET_JOBS_BEGIN });
 
     try {
@@ -249,19 +255,49 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
-  const setEditJob = (id) => {
+  const setEditJob = async(id) => {
 
         dispatch({type: SET_EDIT_JOB, payload:{id}})
 
   };
 
-  const editJob = ()=>{
-      console.log('edit job')
 
+  const editJob = async()=>{
+     
+        dispatch({type: EDIT_JOB_BEGIN})
+
+        try {
+              const {position, company, jobLocation, jobType, status} = state;
+              
+             await authFetch.patch(`/jobs/${state.editJobId}`, {position, company, jobLocation, jobType , status}) 
+
+             dispatch({type: EDIT_JOB_SUCCESS})
+             dispatch({type: CLEAR_JOB })
+      
+        } catch (error) {
+          if (error.response.status === 401) return;
+          dispatch({
+            type: EDIT_JOB_ERROR,
+            payload: { msg: error.response.data.msg },
+          });
+        }
+
+        clearAlert()
   }
 
-  const deleteJob = (id) => {
-    console.log(`delete: ${id}`);
+  const deleteJob = async(jobId) => {
+
+          dispatch({type: DELETE_JOB_BEGIN})
+
+          try{
+            await authFetch.delete(`/jobs/${jobId}`);
+            //updating our state again after deleting job....
+            allJobs();
+
+          }catch(error){
+            logout()
+          }
+
   };
 
   // here we are sending global state, action to the component..

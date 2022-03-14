@@ -25,7 +25,6 @@ const AddJob = () => {
     createJob,
     clearAlert,
     editJob,
-    setEditJob
   } = useAppContext();
 
   
