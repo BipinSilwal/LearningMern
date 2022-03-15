@@ -1,154 +1,114 @@
 import { StatusCodes } from "http-status-codes";
+import mongoose from "mongoose";
 import { BadRequestError } from "../errors/bad-request.js";
 import { NotFoundError } from "../errors/not-found.js";
 import checkPermission from "../middleware/checkPermission.js";
 import JOB from "../models/Job.js";
 
+export const createJob = async (req, res) => {
+  // for creating job we need this field from the user..
+  const { company, position } = req.body;
 
-export const createJob = async(req,res)=>{
+  // if blank send bad request error in middleware and then to user..
 
+  if (!company || !position) {
+    throw new BadRequestError("Please provide all the values");
+  }
 
-    // for creating job we need this field from the user..
-        const {company, position} = req.body;
+  // we get createBy field from user which need to have user Id to create new one.
+  // calling auth middleware to get verified token which contain user Id..
+  req.body.createdBy = req.user.userId;
 
+  // we create new job all time when there is user logged in..
+  const job = await JOB.create(req.body);
 
-        // if blank send bad request error in middleware and then to user..
-        
-        if(!company || !position){
+  // sending response to the user...
+  res.status(StatusCodes.CREATED).json({ job });
+};
 
-                throw new BadRequestError('Please provide all the values');
 
+export const getAllJobs = async (req, res, next) => {
+  // when user is logged in  they have userId which we get through verifying token
+  // req can access any value of any middleware so req.user is getting value from token verification.
+  const jobs = await JOB.find({ createdBy: req.user.userId });
 
-        }
+  res.status(StatusCodes.OK).json({
+    status: "success",
+    jobs,
+    totalJobs: jobs.length,
+    numOfPages: 1,
+  });
+};
 
-        // we get createBy field from user which need to have user Id to create new one.
-        // calling auth middleware to get verified token which contain user Id..
-        req.body.createdBy = req.user.userId;
 
-       
+export const updateJob = async (req, res, next) => {
+  // when user click edit button, it triggers the id which we getting from the url.. params helps to get value from url.
+  const { id: jobId } = req.params;
 
-        // we create new job all time when there is user logged in..
-        const job = await JOB.create(req.body);
+  // value input by the user in the frontend..
+  const { company, position } = req.body;
 
-        
+  // error if no value
+  if (!company || !position) {
+    throw new BadRequestError("Please provide all the values");
+  }
 
+  // finding document in database by searching the id
+  const job = await JOB.findOne({ _id: jobId });
 
-        // sending response to the user...
-        res.status(StatusCodes.CREATED).json({job})
+  // if no document error
+  if (!job) {
+    throw new NotFoundError(`No job with id ${jobId}`);
+  }
 
+  // only can be updated by same user who created the job...
+  checkPermission(req.user, job.createdBy);
 
+  // we update our req.body by getting id.. using findByIdAndUpdate since we dont have hook in JOBMODEL, otherwise we use save function to update value..
+  // hook in model will be trigger using save function but not findByIdAndUpdate
+  const updateJob = await JOB.findByIdAndUpdate({ _id: jobId }, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
+  res.status(StatusCodes.OK).json({ updateJob });
+};
 
 
-}
+export const deleteJob = async (req, res, next) => {
+  // when user click edit button, it triggers the id which we getting from the url.. params helps to get value from url.
+  const { id: jobId } = req.params;
 
-export const getAllJobs = async(req,res,next)=>{
+  // finding document in database by searching the id
+  const job = await JOB.findOne({ _id: jobId });
 
-    // when user is logged in  they have userId which we get through verifying token 
-    // req can access any value of any middleware so req.user is getting value from token verification.
-        const jobs = await JOB.find({createdBy: req.user.userId});
+  // if no document error
+  if (!job) {
+    throw new NotFoundError(`No job with id ${jobId}`);
+  }
 
-        
-        res.status(StatusCodes.OK).json({
-            status:'success',
-            jobs,
-            totalJobs: jobs.length, 
-            numOfPages: 1
-        })
+  // only can be deleted by same user who created the job...
+  checkPermission(req.user, job.createdBy);
 
+  // remove the document from database...
+  await job.remove();
 
+  res.status(StatusCodes.OK).json({
+    status: "success",
+    message: "job deleted!!",
+  });
+};
 
-}
 
-export const updateJob =async(req,res,next)=>{
+export const showStats = async (req, res) => {
 
+    // we match all the user who created job from middleware and add those value 
+    //we group them using the field type. here we need status so we are using status.
+  let stats = await JOB.aggregate([
+    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+    { $group: { _id: "$status", count: { $sum: 1 } } },
+  ]);
 
-// when user click edit button, it triggers the id which we getting from the url.. params helps to get value from url.
-        const {id: jobId} = req.params
+    res.status(StatusCodes.OK).json({stats});
 
-        // value input by the user in the frontend..
-        const {company, position} = req.body;
-
-// error if no value
-        if(!company || !position){
-
-            throw new BadRequestError('Please provide all the values');
-
-
-    }
-
-    // finding document in database by searching the id
-    const job = await JOB.findOne({_id: jobId})
-
-    // if no document error
-    if(!job){
-
-            throw new NotFoundError(`No job with id ${jobId}`)
-
-    }
-
-// only can be updated by same user who created the job...
-    checkPermission(req.user, job.createdBy);
-
-
-    // we update our req.body by getting id.. using findByIdAndUpdate since we dont have hook in JOBMODEL, otherwise we use save function to update value..
-    // hook in model will be trigger using save function but not findByIdAndUpdate
-    const updateJob = await JOB.findByIdAndUpdate({ _id: jobId }, req.body, {
-        new:true,
-        runValidators:true
-    })
-
-    
-    res.status(StatusCodes.OK).json({ updateJob });
-
-
-
-    
-
-
-}
-
-
-
-
-export const deleteJob = async(req,res,next)=>{
-
-    // when user click edit button, it triggers the id which we getting from the url.. params helps to get value from url.
-    const {id: jobId} = req.params
-
-       // finding document in database by searching the id
-       const job = await JOB.findOne({_id: jobId})
-
-       // if no document error
-       if(!job){
-   
-               throw new NotFoundError(`No job with id ${jobId}`)
-   
-       }
-
-
-// only can be deleted by same user who created the job...
-checkPermission(req.user, job.createdBy);
-
-    await job.remove();
-
-    res.status(StatusCodes.OK).json({
-
-            status:'success',
-            message:'job deleted!!'
-
-    })
-
-
-}
-
-export const showStats = (req,res,next)=>{
-
-    res.send(' show Stats ');
-
-
-}
-
-
-
-
+};
