@@ -109,6 +109,31 @@ export const showStats = async (req, res) => {
     { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
 
+  // reduce array helps us to get single total digit whether its object, array, or number ..
+  stats = stats.reduce((acc,curr)=>{
+
+        //acc is total value
+        // curr we getting from database as object
+
+        //destructing the value we get from database
+        const {_id:title, count} = curr;
+
+        // creating new object of acc with count value.. 
+        acc[title]= count;
+        return acc;
+
+
+
+  }, {});
+
+  const defaultStats = {
+
+            pending: stats.pending || 0,
+            pending: stats.pending || 0,
+            pending: stats.pending || 0,
+
+  }
+
     res.status(StatusCodes.OK).json({stats});
 
 };
