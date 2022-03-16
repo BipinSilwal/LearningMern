@@ -126,14 +126,18 @@ export const showStats = async (req, res) => {
 
   }, {});
 
+
+  // when user just register and haven't add job we cant break our stats so we create default stats..
   const defaultStats = {
 
             pending: stats.pending || 0,
-            pending: stats.pending || 0,
-            pending: stats.pending || 0,
+            interview: stats.interview || 0,
+            declined: stats.declined || 0,
 
   }
 
-    res.status(StatusCodes.OK).json({stats});
+  let monthlyApplications = [];
+
+    res.status(StatusCodes.OK).json({defaultStats, monthlyApplications});
 
 };
