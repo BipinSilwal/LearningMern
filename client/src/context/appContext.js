@@ -22,6 +22,8 @@ import {
   UPDATE_USER_BEGIN,
   UPDATE_USER_ERROR,
   UPDATE_USER_SUCCESS,
+  STATS_JOB_BEGIN,
+  STATS_JOB_SUCCESS,
 } from "./action";
 import reducer from "./reducers";
 import axios from "axios";
@@ -54,6 +56,8 @@ const initialState = {
   jobType: "full-time",
   statusOptions: ["interview", "declined", "pending"],
   status: "pending",
+  defaultStats: {},
+  monthlyApplications: [],
 };
 
 // context helps us to create global state which can be accessed by all the component in the indexjs component
@@ -231,9 +235,7 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
-
   const allJobs = async () => {
-
     dispatch({ type: GET_JOBS_BEGIN });
 
     try {
@@ -255,49 +257,68 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
-  const setEditJob = async(id) => {
-
-        dispatch({type: SET_EDIT_JOB, payload:{id}})
-
+  const setEditJob = async (id) => {
+    dispatch({ type: SET_EDIT_JOB, payload: { id } });
   };
 
+  const editJob = async () => {
+    dispatch({ type: EDIT_JOB_BEGIN });
 
-  const editJob = async()=>{
-     
-        dispatch({type: EDIT_JOB_BEGIN})
+    try {
+      const { position, company, jobLocation, jobType, status } = state;
 
-        try {
-              const {position, company, jobLocation, jobType, status} = state;
-              
-             await authFetch.patch(`/jobs/${state.editJobId}`, {position, company, jobLocation, jobType , status}) 
+      await authFetch.patch(`/jobs/${state.editJobId}`, {
+        position,
+        company,
+        jobLocation,
+        jobType,
+        status,
+      });
 
-             dispatch({type: EDIT_JOB_SUCCESS})
-             dispatch({type: CLEAR_JOB })
-      
-        } catch (error) {
-          if (error.response.status === 401) return;
-          dispatch({
-            type: EDIT_JOB_ERROR,
-            payload: { msg: error.response.data.msg },
-          });
-        }
+      dispatch({ type: EDIT_JOB_SUCCESS });
+      dispatch({ type: CLEAR_JOB });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
 
-        clearAlert()
-  }
+    clearAlert();
+  };
 
-  const deleteJob = async(jobId) => {
+  const deleteJob = async (jobId) => {
+    dispatch({ type: DELETE_JOB_BEGIN });
 
-          dispatch({type: DELETE_JOB_BEGIN})
+    try {
+      await authFetch.delete(`/jobs/${jobId}`);
+      //updating our state again after deleting job....
+      allJobs();
+    } catch (error) {
+      logout();
+    }
+  };
 
-          try{
-            await authFetch.delete(`/jobs/${jobId}`);
-            //updating our state again after deleting job....
-            allJobs();
+  const allStats = async () => {
+    dispatch({ type: STATS_JOB_BEGIN });
 
-          }catch(error){
-            logout()
-          }
+    try {
+      const { data } = await authFetch.get("/jobs/stats");
+      const { defaultStats, monthlyApplications } = data;
 
+      dispatch({
+        type: STATS_JOB_SUCCESS,
+        payload: {
+          defaultStats,
+          monthlyApplications,
+        },
+      });
+    } catch (error) {
+      logout();
+    }
+
+    clearAlert();
   };
 
   // here we are sending global state, action to the component..
@@ -317,7 +338,8 @@ const AppProvider = ({ children }) => {
         allJobs,
         setEditJob,
         deleteJob,
-        editJob
+        editJob,
+        allStats,
       }}
     >
       {children}
