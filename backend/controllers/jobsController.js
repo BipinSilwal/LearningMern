@@ -29,14 +29,86 @@ export const createJob = async (req, res) => {
 
 
 export const getAllJobs = async (req, res, next) => {
+
+  // in url we get query after api/v1/all-jobs?search 
+  // req.query gives us value after ?
+    const { search, status, jobType, sort} = req.query;
+
+
+    // creating object so that we can have condition for all value
+    const queryObject = {
+
+            createdBy: req.user.userId
+
+    }
+
+// all return us all the document. if not we return what status we have passed in url after ?
+
+    if(status !== 'all'){
+
+          queryObject.status = status
+
+    }
+
+    // all return us all the document. if not we return what status we have passed in url after ?
+    if(jobType !== 'all'){
+
+          queryObject.jobType = jobType
+
+    }
+
+    // search exist
+    if(search){
+
+      // then position is created what the user is typing and here options 'i' is case-insensitive so.. it searches in the database..
+        queryObject.position = { $regex: search, $options:'i' }
+
+    }
+
+    // finding with condition of status and userId.
+    
+      
+    let result = JOB.find(queryObject);
+
+
+
+    if(sort === 'latest'){
+
+        result = result.sort('-createdAt')
+
+    }
+
+    if(sort === 'oldest'){
+
+        result = result.sort('createdAt')
+
+    }
+
+    if(sort === 'a-z'){
+
+        result = result.sort('position')
+
+    }
+
+    if(sort === 'latest'){
+
+        result = result.sort('-position')
+
+    }
+
+      
+
+
+
+
   // when user is logged in  they have userId which we get through verifying token
   // req can access any value of any middleware so req.user is getting value from token verification.
-  const jobs = await JOB.find({ createdBy: req.user.userId });
+  const jobs = await result;
 
   res.status(StatusCodes.OK).json({
     status: "success",
-    jobs,
     totalJobs: jobs.length,
+    jobs,
     numOfPages: 1,
   });
 };
