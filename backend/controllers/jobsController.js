@@ -4,6 +4,7 @@ import { BadRequestError } from "../errors/bad-request.js";
 import { NotFoundError } from "../errors/not-found.js";
 import checkPermission from "../middleware/checkPermission.js";
 import JOB from "../models/Job.js";
+import moment from 'moment';
 
 export const createJob = async (req, res) => {
   // for creating job we need this field from the user..
@@ -109,6 +110,8 @@ export const showStats = async (req, res) => {
     { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
 
+  console.log(stats);
+
   // reduce array helps us to get single total digit whether its object, array, or number ..
   stats = stats.reduce((acc,curr)=>{
 
@@ -136,7 +139,7 @@ export const showStats = async (req, res) => {
 
   }
 
-  let monthlyApplications = await Job.aggregate([
+  let monthlyApplications = await JOB.aggregate([
 
         { $match :{ createdBy: mongoose.Types.ObjectId(req.user.userId)  }},
         { $group :{ 
@@ -151,8 +154,20 @@ export const showStats = async (req, res) => {
         {$sort: {'_id.year':-1, '_id.month':-1}},
         {$limit: 6}
 
-  ])
+  ]);
+
+  monthlyApplications = monthlyApplications.map((item)=>{
+
+          const { _id:{year, month},  count} = item
+          const date = moment()
+              .month(month -1)
+              .year(year)
+              .format('MMM Y')
+              return {date, count}
+  })
 
     res.status(StatusCodes.OK).json({defaultStats, monthlyApplications});
 
 };
+
+
