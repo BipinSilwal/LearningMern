@@ -32,7 +32,7 @@ export const getAllJobs = async (req, res, next) => {
 
   // in url we get query after api/v1/all-jobs?search 
   // req.query gives us value after ?
-    const { search, status, jobType, sort} = req.query;
+    const { search, status, jobType, sort } = req.query;
 
 
     // creating object so that we can have condition for all value
@@ -103,16 +103,42 @@ export const getAllJobs = async (req, res, next) => {
 
 
 
+// page we get from the query.
+
+const page = Number(req.query.page) || 1 ;
+
+// we get limit from the query or we have default 10
+const limit = Number(req.query.limit) || 10;
+
+// skip helps us to skip number of document to go to that page..
+// in page 2 we skip first page which contain 10 document.  2-1 =1*10 = 10 document escaped..
+const skip = (page-1)*limit;
+
+// skip and limit given by mongo database..
+result = result.skip(skip).limit(limit);
+
+
+
+
+
 
   // when user is logged in  they have userId which we get through verifying token
   // req can access any value of any middleware so req.user is getting value from token verification.
   const jobs = await result;
 
+
+  // countDocuments helps us to get all the document count.
+  const totalJobs = await JOB.countDocuments(queryObject);
+
+  // we get number of pages with totalJobs & limits
+  const numOfPages = Math.ceil(totalJobs/limit);
+
+
   res.status(StatusCodes.OK).json({
     status: "success",
-    totalJobs: jobs.length,
+    totalJobs,
     jobs,
-    numOfPages: 1,
+    numOfPages
   });
 };
 
