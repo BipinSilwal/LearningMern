@@ -54,3 +54,7 @@ export const EDIT_JOB_ERROR = 'EDIT_JOB_ERROR'
 
 export const STATS_JOB_BEGIN = 'STATS_JOB_BEGIN'
 export const STATS_JOB_SUCCESS = 'STATS_JOB_SUCCESS'
+
+
+export const CLEAR_FILTERS = 'CLEAR_FILTERS'
+

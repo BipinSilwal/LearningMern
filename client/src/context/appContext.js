@@ -24,6 +24,8 @@ import {
   UPDATE_USER_SUCCESS,
   STATS_JOB_BEGIN,
   STATS_JOB_SUCCESS,
+  CLEAR_FILTERS,
+
 } from "./action";
 import reducer from "./reducers";
 import axios from "axios";
@@ -58,6 +60,11 @@ const initialState = {
   status: "pending",
   defaultStats: {},
   monthlyApplications: [],
+  search:'',
+  searchStatus:'all',
+  searchType:'all',
+  sort:'latest',
+  sortOptions:['latest', 'oldest', 'a-z', 'z-a']
 };
 
 // context helps us to create global state which can be accessed by all the component in the indexjs component
@@ -210,6 +217,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: CLEAR_JOB });
   };
 
+
   const createJob = async () => {
     dispatch({ type: CREATE_JOB_BEGIN });
     try {
@@ -236,10 +244,21 @@ const AppProvider = ({ children }) => {
   };
 
   const allJobs = async () => {
+
+    const {search, searchStatus, searchType, sort} = state;
+
+    let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+
+    if(search){
+
+        url = url + `&search=${search}`
+
+    }
+
     dispatch({ type: GET_JOBS_BEGIN });
 
     try {
-      const { data } = await authFetch.get("/jobs");
+      const { data } = await authFetch.get(url);
 
       const { jobs, totalJobs, numOfPages } = data;
 
@@ -321,6 +340,14 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+const clearFilters = ()=>{
+
+        dispatch({type: CLEAR_FILTERS})
+
+}
+
+
+
   // here we are sending global state, action to the component..
   return (
     <AppContext.Provider
@@ -340,6 +367,7 @@ const AppProvider = ({ children }) => {
         deleteJob,
         editJob,
         allStats,
+        clearFilters,
       }}
     >
       {children}
