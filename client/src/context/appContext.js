@@ -25,6 +25,7 @@ import {
   STATS_JOB_BEGIN,
   STATS_JOB_SUCCESS,
   CLEAR_FILTERS,
+  CHANGE_PAGE,
 
 } from "./action";
 import reducer from "./reducers";
@@ -41,6 +42,7 @@ const initialState = {
   jobs: [],
   totalJobs: 0,
   page: 1,
+  numOfPages:1,
   isLoading: false,
   showAlert: false,
   alertText: "",
@@ -245,9 +247,9 @@ const AppProvider = ({ children }) => {
 
   const allJobs = async () => {
 
-    const {search, searchStatus, searchType, sort} = state;
+    const {search, searchStatus, searchType, sort,page} = state;
 
-    let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+    let url = `/jobs?&page=${page}status=${searchStatus}&jobType=${searchType}&sort=${sort}`
 
     if(search){
 
@@ -346,6 +348,12 @@ const clearFilters = ()=>{
 
 }
 
+const changePage = (page)=>{
+
+      dispatch({type: CHANGE_PAGE, payload: {page} })
+
+}
+
 
 
   // here we are sending global state, action to the component..
@@ -368,6 +376,7 @@ const clearFilters = ()=>{
         editJob,
         allStats,
         clearFilters,
+        changePage
       }}
     >
       {children}

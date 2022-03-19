@@ -3,17 +3,18 @@ import Wrapper from "../assets/wrappers/JobsContainer";
 import { useAppContext } from "../context/appContext";
 import Job from "./Job";
 import Loading from "./Loading";
+import PaginationContainer from "./PaginationContainer.js";
 
 const JobsContainer = () => {
   const { 
-    jobs, totalJobs, allJobs, isLoading, page, search, searchType,
-    searchStatus,sort
+    jobs, totalJobs, allJobs, isLoading,  numOfPages, search, searchType,
+    searchStatus,sort,page
   
   } = useAppContext();
 
   useEffect(() => {
     allJobs();
-  }, [search, searchType,searchStatus,sort]);
+  }, [search, searchType,searchStatus,sort,page]);
 
   if (isLoading) {
     return <Loading center />;
@@ -35,6 +36,7 @@ const JobsContainer = () => {
           return <Job key={data._id} {...data} />;
         })}
       </div>
+     {numOfPages > 1 && <PaginationContainer/>}
     </Wrapper>
   );
 };
