@@ -44,14 +44,14 @@ export const getAllJobs = async (req, res, next) => {
 
 // all return us all the document. if not we return what status we have passed in url after ?
 
-    if(status !== 'all'){
+    if(status && status !== 'all'){
 
           queryObject.status = status
 
     }
 
     // all return us all the document. if not we return what status we have passed in url after ?
-    if(jobType !== 'all'){
+    if(jobType && jobType !== 'all'){
 
           queryObject.jobType = jobType
 
@@ -71,6 +71,9 @@ export const getAllJobs = async (req, res, next) => {
     let result = JOB.find(queryObject);
 
 
+// after we get the result as object we may need to sort in ascending or descending order. 
+
+//minus - is descending. createdAt or position are field.
 
     if(sort === 'latest'){
 

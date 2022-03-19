@@ -1,4 +1,4 @@
-import { ADD_JOB, CLEAR_ALERT, CLEAR_JOB, CREATE_JOB_BEGIN, CREATE_JOB_ERROR, CREATE_JOB_SUCCESS, DELETE_JOB_BEGIN, DISPLAY_ALERT, EDIT_JOB_BEGIN, EDIT_JOB_ERROR, EDIT_JOB_SUCCESS, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, SET_EDIT_JOB, STATS_JOB_BEGIN, STATS_JOB_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
+import { ADD_JOB, CLEAR_ALERT, CLEAR_FILTERS, CLEAR_JOB, CREATE_JOB_BEGIN, CREATE_JOB_ERROR, CREATE_JOB_SUCCESS, DELETE_JOB_BEGIN, DISPLAY_ALERT, EDIT_JOB_BEGIN, EDIT_JOB_ERROR, EDIT_JOB_SUCCESS, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, LOGOUT_USER, SETUP_USER_BEGIN, SETUP_USER_ERROR, SETUP_USER_SUCCESS, SET_EDIT_JOB, STATS_JOB_BEGIN, STATS_JOB_SUCCESS, TOGGLE_SIDEBAR, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./action";
 import { initialState } from "./appContext";
 
 
@@ -117,6 +117,17 @@ const reducer = (state,  action)=>{
                         token:null,
                         userLocation:null,
                         jobLocation:null
+                    
+                }
+
+         case CLEAR_FILTERS:
+             
+             return { ...state,
+                        search:'',
+                        searchStatus:'all',
+                        searchType:'all',
+                        sort:'latest',
+                        
                     
                 }
             
