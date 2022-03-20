@@ -1,5 +1,5 @@
 import { User } from '../models/User.js';
-import { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } from 'http-status-codes';
+import {  StatusCodes } from 'http-status-codes';
 import { BadRequestError, UnauthenticatedError  } from '../errors/index.js';
 
 
@@ -159,7 +159,7 @@ export const updateUser = async(req,res )=>{
   // for user document to get updated we need to save it..
   await user.save();
 
-console.log(user);
+
   // after saving the new document we again send the new token back to the client...
 const token = user.createJWT();
 

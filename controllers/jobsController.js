@@ -211,7 +211,7 @@ export const showStats = async (req, res) => {
     { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
 
-  console.log(stats);
+
 
   // reduce array helps us to get single total digit whether its object, array, or number ..
   stats = stats.reduce((acc,curr)=>{
